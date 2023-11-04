@@ -45,7 +45,7 @@ export function TablaTa() {
           </tr>
         </thead>
         <tbody>
-          {TABLE_ROWS.map(({ name, job, date }, index) => {
+          {TABLE_ROWS.map(({ name, desc, date }, index) => {
             const isLast = index === TABLE_ROWS.length - 1;
             const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
  
@@ -66,7 +66,7 @@ export function TablaTa() {
                     color="blue-gray"
                     className="font-normal"
                   >
-                    {job}
+                    {desc}
                   </Typography>
                 </td>
                 <td className={classes}>
@@ -86,7 +86,7 @@ export function TablaTa() {
                     color="blue-gray"
                     className="font-medium"
                   >
-                    Edit
+                    Hecho
                   </Typography>
                 </td>
               </tr>
