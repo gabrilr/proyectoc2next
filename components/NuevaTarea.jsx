@@ -11,35 +11,42 @@ import {
   Input,
   Textarea,
 } from "@material-tailwind/react";
+import moment from 'moment';
  
 export function DialogTarea({ tareas, setTareas }) {
 
-const [titulo, setTitulo] = useState();
-const [descripcion, setDescripcion] = useState();
-const [fecha, setFecha] = useState();
+  const fechaAct = () => {
+    var date = moment();
+    //console.log( date.format('DD/MM/YYYY'));
+    return date.format('DD/MM/YYYY');
+  }
+
+  const [titulo, setTitulo] = useState();
+  const [descripcion, setDescripcion] = useState();
+  const [fecha, setFecha] = useState(fechaAct());
 
   const [open, setOpen] = useState(false);
  
   const handleOpen = () => setOpen(!open);
 
-  const fechaActual = () => { 
-    const d = new Date();
-    return (parseInt(d.getDay())+5) + "/" + (parseInt(d.getMonth())+1) + "/" + d.getFullYear();
-  }
 
   const handleSendData = () => {
 
-    setTareas([
-      ...tareas,
-      {
-        name: titulo,
-        desc: descripcion,
-        date: fecha,
-      }
-    ]
-    )
-    
-    setOpen(!open)
+    if (titulo && descripcion && fecha) {
+      
+      setTareas([
+        ...tareas,
+        {
+          name: titulo,
+          desc: descripcion,
+          date: fecha,
+        }
+      ])
+      setOpen(!open);
+    } else {
+      
+      alert('Falta rellenar campos');
+    }
   };
  
   return (
@@ -60,7 +67,7 @@ const [fecha, setFecha] = useState();
             </Typography>
             <Input label="Titulo" id="titulo" onChange={(e) => setTitulo(e.target.value)}/>
             <Textarea label="Descripción" id="descripcion" onChange={(e) => setDescripcion(e.target.value)}/>
-            <Input label="Fecha" id="fecha" onChange={(e) => setFecha(e.target.value)}/>
+            <Input label="Fecha" id="fecha" placeholder="" value={fecha} onChange={(e) => setFecha(e.target.value)}/>
             {/* 
             <DatePicker label="Basic date picker" />
             */}
