@@ -45,7 +45,7 @@ export function Navb() {
   }, []);
  
   return (
-    <Navbar className="fullWidth mx-auto max-w-screen-xl px-6 py-3">
+    <Navbar className="w-full mx-0 py-3 mb-5">
       <div className="flex items-center justify-between text-blue-gray-900">
         <Typography
           as="a"
