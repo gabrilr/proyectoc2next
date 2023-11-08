@@ -22,6 +22,7 @@ export function DialogTarea({ tareas, setTareas }) {
   }
 
   const [titulo, setTitulo] = useState();
+  const [responsable, setResponsable] = useState();
   const [descripcion, setDescripcion] = useState();
   const [fecha, setFecha] = useState(fechaAct());
 
@@ -30,16 +31,37 @@ export function DialogTarea({ tareas, setTareas }) {
   const handleOpen = () => setOpen(!open);
 
 
-  const handleSendData = () => {
+  const handleSendData = async () => {
 
     if (titulo && descripcion && fecha) {
-      
+
+      const d = {
+        title: titulo,
+        desc: descripcion,
+        resp: responsable,
+        date: fecha,
+      }
+
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
+        body: JSON.stringify(d),
+
+      }
+      const data = await fetch('http://127.0.0.1:3002/api/registrar', options);
+      const datos = await data.json();
       setTareas([
         ...tareas,
         {
-          name: titulo,
-          desc: descripcion,
-          date: fecha,
+          id : datos._id,
+          title : datos.title,
+          desc: datos.desc,
+          resp: datos.resp,
+          date: datos.date,
+          status: "Pendiente"
         }
       ])
       setOpen(!open);
@@ -66,11 +88,9 @@ export function DialogTarea({ tareas, setTareas }) {
               Titulo
             </Typography>
             <Input label="Titulo" id="titulo" onChange={(e) => setTitulo(e.target.value)}/>
+            <Input label="Responsable" id="responsable" onChange={(e) => setResponsable(e.target.value)}/>
             <Textarea label="Descripción" id="descripcion" onChange={(e) => setDescripcion(e.target.value)}/>
-            <Input label="Fecha" id="fecha" placeholder="" value={fecha} onChange={(e) => setFecha(e.target.value)}/>
-            {/* 
-            <DatePicker label="Basic date picker" />
-            */}
+            <Input label="Fecha" id="fecha" value={fecha} onChange={(e) => setFecha(e.target.value)}/>
           </div>
         </DialogBody>
         <DialogFooter className="space-x-2">

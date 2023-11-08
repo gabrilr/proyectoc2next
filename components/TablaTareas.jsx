@@ -1,30 +1,74 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Option, Select, Typography } from "@material-tailwind/react";
 
 import { DialogTarea } from "../components/NuevaTarea";
 
 export function TablaTa() {
+  const [tareas, setTareas] = useState([]);
 
-  const [tareas, setTareas] = useState([
-    {
-      name: "Gabo",
-      desc: "Nepew",
-      date: "23/04/18",
-    },
-    {
-      name: "Dani",
-      desc: "Manager",
-      date: "23/04/18",
-    },
-    {
-      name: "Maese",
-      desc: "Manager",
-      date: "23/04/18",
-    }
-  ]);
+    // Función para realizar la solicitud y obtener las tareas
+    const obtenerTareas = async () => {
+      try {
+        const options = {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+          },
+        }
+        const data = await fetch('http://127.0.0.1:3002/api/obtener/tasks', options);
+        //const datos = data.json();
+        if (data.ok) {
+          const datos = await data.json(); // Extraer los datos del cuerpo de la respuesta
+          console.log(JSON.stringify(datos));
+          setTareas(datos);
 
-  const TABLE_HEAD = ["Tarea", "Descripcion", "Fecha", "Estatus"];
+        } else { alert(data.status) }
+
+      } catch (error) {
+        console.error('Error al obtener las tareas:', error);
+      }
+    };
+
+  useEffect(() => {
+    // Llama a la función para obtener las tareas cuando el componente se monta
+    obtenerTareas();
+  }, []);
+
+  //const [estatus, setEstatus] = useState('Pendiente');
+
+  const handleChangeEstatus = async (e, _id, title, desc, resp, date) => {
+
+    const apiUrl = `http://localhost:3002/api/actualizar/${_id}`;
+
+    const data = {
+      title: title,
+      desc: desc,
+      resp: resp,
+      date: date,
+      status: e.target.value,
+    };
+
+    await fetch(apiUrl, {
+      method: 'PUT', // Utilizamos el método PUT para actualizar el objeto
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data) // Convierte el objeto a una cadena JSON antes de enviarlo en el cuerpo
+    })
+      .then(response => response.json())
+      .then(updatedData => {
+        console.log('Objeto actualizado:', updatedData);
+      })
+      .catch(error => {
+        console.error('Error al actualizar el objeto:', error);
+      });
+
+      obtenerTareas();
+  };
+
+  const tabla_head = ["Tarea", "Descripcion", "Responsable", "Fecha", "Estatus"];
 
   return (
     <div className="flex">
@@ -40,7 +84,7 @@ export function TablaTa() {
           <table className="w-full min-w-max table-auto text-left">
             <thead>
               <tr>
-                {TABLE_HEAD.map((head) => (
+                {tabla_head.map((head) => (
                   <th
                     key={head}
                     className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
@@ -48,7 +92,7 @@ export function TablaTa() {
                     <Typography
                       variant="small"
                       color="blue-gray"
-                      className="font-normal leading-none opacity-70"
+                      className="font-normal leading-none opacity-70 text-left "
                     >
                       {head}
                     </Typography>
@@ -57,21 +101,21 @@ export function TablaTa() {
               </tr>
             </thead>
             <tbody>
-              {tareas.map(({ name, desc, date }, index) => {
+              {tareas.map(({ _id, title, desc, resp, date, status }, index) => {
                 const isLast = index === tareas.length - 1;
                 const classes = isLast
-                  ? "p-4"
-                  : "p-4 border-b border-blue-gray-50";
+                  ? " pl-1 py-4"
+                  : " pl-1 py-4 border-b border-blue-gray-50 gap-6";
 
                 return (
-                  <tr key={name}>
+                  <tr key={_id}>
                     <td className={classes}>
                       <Typography
                         variant="small"
                         color="blue-gray"
                         className="font-normal"
                       >
-                        {name}
+                        {title}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -81,6 +125,15 @@ export function TablaTa() {
                         className="font-normal"
                       >
                         {desc}
+                      </Typography>
+                    </td>
+                    <td className={classes}>
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal"
+                      >
+                        {resp}
                       </Typography>
                     </td>
                     <td className={classes}>
@@ -100,11 +153,25 @@ export function TablaTa() {
                         color="blue-gray"
                         className="font-medium"
                       >
-                        <div className="w-12">
-                          <Select label="Estatus" success>
-                            <Option>Pendiente</Option>
-                            <Option>Finalizado</Option>
-                          </Select>
+                        <div className="">
+                          <select key={_id} class="p-2 border border-gray-300 rounded" value={status} onChange={(e) => handleChangeEstatus(e, _id)}>
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="En proceso">En proceso</option>
+                            <option value="Finalizado">Finalizado</option>
+                          </select>
+
+                          {/* <Select label="Estatus" success onChange={handleChangeEstatus} value={estatus}
+                            selected={(element) =>
+                              element &&
+                              React.cloneElement(element, {
+                                disabled: true,
+                                className:
+                                  "flex items-center opacity-100 px-0 gap-2 pointer-events-none",
+                              })
+                            }>
+                            <Option value="En proceso">En proceso</Option>
+                            <Option value="Finalizado">Finalizado</Option>
+                          </Select> */}
                         </div>
                       </Typography>
                     </td>
