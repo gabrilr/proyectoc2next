@@ -7,14 +7,14 @@ import {
  
 function NavList() {
   return (
-    <ul className="my-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+    <ul className="my-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6" style={{background: "rgb(233,255,254)"}}>
       <Typography
         as="li"
         variant="small"
         color="blue-gray"
         className="p-1 font-medium"
       >
-        <a href="#" className="flex items-center hover:text-blue-500 transition-colors">
+        <a href="/" className="flex items-center hover:text-blue-500 transition-colors">
           Tareas
         </a>
       </Typography>
@@ -24,7 +24,7 @@ function NavList() {
         color="blue-gray"
         className="p-1 font-medium"
       >
-        <a href="#" className="flex items-center hover:text-blue-500 transition-colors">
+        <a href="/historial" className="flex items-center hover:text-blue-500 transition-colors">
           Historial
         </a>
       </Typography>

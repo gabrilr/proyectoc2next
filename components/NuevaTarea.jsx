@@ -13,11 +13,10 @@ import {
 } from "@material-tailwind/react";
 import moment from 'moment';
  
-export function DialogTarea({ tareas, setTareas }) {
+export function NuevaTarea({ tareas, setTareas }) {
 
   const fechaAct = () => {
     var date = moment();
-    //console.log( date.format('DD/MM/YYYY'));
     return date.format('DD/MM/YYYY');
   }
 

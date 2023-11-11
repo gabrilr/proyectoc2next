@@ -11,7 +11,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className} style={{background: "white"}} >
+      <body className={inter.className} style={{background: "radial-gradient(circle, rgba(233,255,254,1) 0%, rgba(174,222,253,1) 100%)"}} >
         {children}
       </body>
     </html>

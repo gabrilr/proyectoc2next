@@ -2,12 +2,12 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Option, Select, Typography } from "@material-tailwind/react";
 
-import { DialogTarea } from "../components/NuevaTarea";
+import { NuevaTarea } from "../components/NuevaTarea";
 
 export function TablaTa() {
+
   const [tareas, setTareas] = useState([]);
 
-    // Función para realizar la solicitud y obtener las tareas
     const obtenerTareas = async () => {
       try {
         const options = {
@@ -32,7 +32,7 @@ export function TablaTa() {
     };
 
   useEffect(() => {
-    // Llama a la función para obtener las tareas cuando el componente se monta
+    // Obtenemos las tareas.
     obtenerTareas();
   }, []);
 
@@ -59,28 +59,28 @@ export function TablaTa() {
     })
       .then(response => response.json())
       .then(updatedData => {
-        console.log('Objeto actualizado:', updatedData);
+        console.log('Estatus actualizado:', updatedData);
       })
       .catch(error => {
-        console.error('Error al actualizar el objeto:', error);
+        console.error('Error al actualizar el estatus:', error);
       });
 
       obtenerTareas();
   };
 
-  const tabla_head = ["Tarea", "Descripcion", "Responsable", "Fecha", "Estatus"];
+  const tabla_head = ["Tarea", "Descripcion", "Responsable", "Fecha inicio", "Estatus"];
 
   return (
     <div className="flex">
       <div className="w-1/12"></div>
       <div className="w-10/12">
         <div className="flex flex-row-reverse justify-between items-end w-full mb-2">
-          <DialogTarea
+          <NuevaTarea
             tareas={tareas}
             setTareas={setTareas}
           />
         </div>
-        <Card className="h-full w-full overflow-scroll">
+        <Card className="w-full">
           <table className="w-full min-w-max table-auto text-left">
             <thead>
               <tr>
@@ -104,8 +104,8 @@ export function TablaTa() {
               {tareas.map(({ _id, title, desc, resp, date, status }, index) => {
                 const isLast = index === tareas.length - 1;
                 const classes = isLast
-                  ? " pl-1 py-4"
-                  : " pl-1 py-4 border-b border-blue-gray-50 gap-6";
+                  ? " pl-4 py-4"
+                  : " pl-4 py-4 border-b border-blue-gray-50";
 
                 return (
                   <tr key={_id}>
@@ -159,19 +159,6 @@ export function TablaTa() {
                             <option value="En proceso">En proceso</option>
                             <option value="Finalizado">Finalizado</option>
                           </select>
-
-                          {/* <Select label="Estatus" success onChange={handleChangeEstatus} value={estatus}
-                            selected={(element) =>
-                              element &&
-                              React.cloneElement(element, {
-                                disabled: true,
-                                className:
-                                  "flex items-center opacity-100 px-0 gap-2 pointer-events-none",
-                              })
-                            }>
-                            <Option value="En proceso">En proceso</Option>
-                            <Option value="Finalizado">Finalizado</Option>
-                          </Select> */}
                         </div>
                       </Typography>
                     </td>
