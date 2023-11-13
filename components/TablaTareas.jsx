@@ -8,28 +8,28 @@ export function TablaTa() {
 
   const [tareas, setTareas] = useState([]);
 
-    const obtenerTareas = async () => {
-      try {
-        const options = {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
-          },
-        }
-        const data = await fetch('http://127.0.0.1:3002/api/obtener/tasks', options);
-        //const datos = data.json();
-        if (data.ok) {
-          const datos = await data.json(); // Extraer los datos del cuerpo de la respuesta
-          console.log(JSON.stringify(datos));
-          setTareas(datos);
-
-        } else { alert(data.status) }
-
-      } catch (error) {
-        console.error('Error al obtener las tareas:', error);
+  const obtenerTareas = async () => {
+    try {
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*'
+        },
       }
-    };
+      const data = await fetch('http://127.0.0.1:3002/api/obtener/tasks', options);
+      //const datos = data.json();
+      if (data.ok) {
+        const datos = await data.json(); // Extraer los datos del cuerpo de la respuesta
+        console.log(JSON.stringify(datos));
+        setTareas(datos);
+
+      } else { alert(data.status) }
+
+    } catch (error) {
+      console.error('Error al obtener las tareas:', error);
+    }
+  };
 
   useEffect(() => {
     // Obtenemos las tareas.
@@ -38,19 +38,13 @@ export function TablaTa() {
 
   //const [estatus, setEstatus] = useState('Pendiente');
 
-  const handleChangeEstatus = async (e, _id, title, desc, resp, date) => {
-
-    const apiUrl = `http://localhost:3002/api/actualizar/${_id}`;
+  const handleChangeEstatus = async (e, _id) => {
 
     const data = {
-      title: title,
-      desc: desc,
-      resp: resp,
-      date: date,
       status: e.target.value,
     };
 
-    await fetch(apiUrl, {
+    await fetch(`http://localhost:3002/api/actualizar/${_id}`, {
       method: 'PUT', // Utilizamos el método PUT para actualizar el objeto
       headers: {
         'Content-Type': 'application/json'
@@ -59,13 +53,13 @@ export function TablaTa() {
     })
       .then(response => response.json())
       .then(updatedData => {
-        console.log('Estatus actualizado:', updatedData);
+        console.log(JSON.stringify(updatedData));
       })
       .catch(error => {
         console.error('Error al actualizar el estatus:', error);
       });
 
-      obtenerTareas();
+    obtenerTareas();
   };
 
   const tabla_head = ["Tarea", "Descripcion", "Responsable", "Fecha inicio", "Estatus"];

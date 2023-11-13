@@ -1,5 +1,7 @@
 "use client"
 
+import Error from "./Error";
+
 import React, { useState } from "react";
 import {
   Button,
@@ -24,11 +26,15 @@ export function NuevaTarea({ tareas, setTareas }) {
   const [responsable, setResponsable] = useState();
   const [descripcion, setDescripcion] = useState();
   const [fecha, setFecha] = useState(fechaAct());
+  const [error, setError] =  useState(false);
 
   const [open, setOpen] = useState(false);
  
-  const handleOpen = () => setOpen(!open);
-
+  const handleOpen = () => {
+    
+    setError(false);
+    setOpen(!open);
+  }
 
   const handleSendData = async () => {
 
@@ -62,11 +68,17 @@ export function NuevaTarea({ tareas, setTareas }) {
           date: datos.date,
           status: "Pendiente"
         }
-      ])
+      ]);
+      
+      setTitulo('');
+      setDescripcion('');
+
+      setError(false);
       setOpen(!open);
+      
     } else {
       
-      alert('Falta rellenar campos');
+      setError(true)
     }
   };
  
@@ -81,6 +93,7 @@ export function NuevaTarea({ tareas, setTareas }) {
             </Typography>
           </DialogHeader>
         </div>
+        {error && <Error><p>Todos los campos son obligatorios</p></Error>}
         <DialogBody>
           <div className="grid gap-6">
             <Typography className="-mb-1" color="blue-gray" variant="h6">
