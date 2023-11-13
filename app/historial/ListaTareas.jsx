@@ -1,3 +1,7 @@
+
+"use client"
+
+import React, { useState, useEffect } from "react";
 import {
   List,
   ListItem,
@@ -20,7 +24,7 @@ export function ListaTareas() {
           'Access-Control-Allow-Origin': '*'
         },
       }
-      const data = await fetch('http://127.0.0.1:3002/api/obtener/tasks/end/Finalizado', options);
+      const data = await fetch('http://localhost:3002/api/obtener/tasks/end/Finalizado', options);
 
       if (data.ok) {
         const datos = await data.json(); // Extraer los datos del cuerpo de la respuesta
@@ -40,50 +44,37 @@ export function ListaTareas() {
   }, []);
 
   return (
-    <>
-    <Card className="w-96">
-      <List>
-        <ListItem>
-          <ListItemPrefix>
-            <Avatar variant="circular" alt="candice" src="/img/face-1.jpg" />
-          </ListItemPrefix>
-          <div>
-            <Typography variant="h6" color="blue-gray">
-              Tania Andrew
-            </Typography>
-            <Typography variant="small" color="gray" className="font-normal">
-              Software Engineer @ Material Tailwind
-            </Typography>
-          </div>
-        </ListItem>
-        <ListItem>
-          <ListItemPrefix>
-            <Avatar variant="circular" alt="alexander" src="/img/face-2.jpg" />
-          </ListItemPrefix>
-          <div>
-            <Typography variant="h6" color="blue-gray">
-              Alexander
-            </Typography>
-            <Typography variant="small" color="gray" className="font-normal">
-              Backend Developer @ Material Tailwind
-            </Typography>
-          </div>
-        </ListItem>
-        <ListItem>
-          <ListItemPrefix>
-            <Avatar variant="circular" alt="emma" src="/img/face-3.jpg" />
-          </ListItemPrefix>
-          <div>
-            <Typography variant="h6" color="blue-gray">
-              Emma Willever
-            </Typography>
-            <Typography variant="small" color="gray" className="font-normal">
-              UI/UX Designer @ Material Tailwind
-            </Typography>
-          </div>
-        </ListItem>
-      </List>
-    </Card>
-    </>
+    <div className="flex">
+      <div className="w-1/12"></div>
+      <div className="w-10/12">
+        <Card>
+          <List>
+            {tareasTer.length === 0 ? (
+              <p>No hay tareas concluidas</p>
+            ) : (tareasTer.map(({_id, title, desc, resp, date, status}, index) => (
+
+                <ListItem key={_id}>
+                  <ListItemPrefix>
+                    {/* <Avatar variant="circular" alt="candice" src="/img/face-1.jpg" /> */}
+                    <Typography variant="h6" color="blue-gray">
+                      {title}
+                    </Typography>
+                  </ListItemPrefix>
+                  <div className="ml-4">
+                    <Typography variant="h6" color="blue-gray">
+                      {desc} -  Estatus: {status}
+                    </Typography>
+                    <Typography variant="small" color="gray" className="font-normal">
+                      Responsable: <b>{resp}</b>, Fecha termino: {date}
+                    </Typography>
+                  </div>
+                </ListItem>
+            ))
+            )}
+          </List>
+        </Card>
+      </div>
+      <div className="w-1/12"></div>
+    </div>
   );
 }

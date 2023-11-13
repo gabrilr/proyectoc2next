@@ -1,6 +1,7 @@
 "use client"
 
 import React from "react";
+import Link from 'next/link';
 import {
   Navbar, Typography,
 } from "@material-tailwind/react";
@@ -14,9 +15,9 @@ function NavList() {
         color="blue-gray"
         className="p-1 font-medium"
       >
-        <a href="/" className="flex items-center hover:text-blue-500 transition-colors">
-          Tareas
-        </a>
+        <Link href = "/" className="flex items-center hover:text-blue-500 transition-colors">
+            Tareas
+        </Link>
       </Typography>
       <Typography
         as="li"
@@ -24,25 +25,25 @@ function NavList() {
         color="blue-gray"
         className="p-1 font-medium"
       >
-        <a href="/historial" className="flex items-center hover:text-blue-500 transition-colors">
-          Historial
-        </a>
+        <Link href = "/historial" className="flex items-center hover:text-blue-500 transition-colors">
+            Historial
+        </Link>
       </Typography>
     </ul>
   );
 }
 export function Navb() {
-  const [openNav, setOpenNav] = React.useState(false);
+  // const [openNav, setOpenNav] = React.useState(false);
  
-  const handleWindowResize = () => window.innerWidth >= 960 && setOpenNav(false);
+  // const handleWindowResize = () => window.innerWidth >= 960 && setOpenNav(false);
  
-  React.useEffect(() => {
-    window.addEventListener("resize", handleWindowResize);
+  // React.useEffect(() => {
+  //   window.addEventListener("resize", handleWindowResize);
  
-    return () => {
-      window.removeEventListener("resize", handleWindowResize);
-    };
-  }, []);
+  //   return () => {
+  //     window.removeEventListener("resize", handleWindowResize);
+  //   };
+  // }, []);
  
   return (
     <Navbar className="fullWidth mx-auto mb-2">
@@ -55,7 +56,7 @@ export function Navb() {
         >
           Task Management
         </Typography>
-        <div className="hidden lg:block">
+        <div className="lg:block">
           <NavList />
         </div>
       </div>
